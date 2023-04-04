@@ -11,6 +11,10 @@ export const validateJWT =
         return res.status(500).json({ erro: "ENV não localizada" });
       }
 
+      if (req.url === "/api/usuarios" && req.method === "POST") {
+        return handler(req, res);
+      }
+
       if (!req || !req.headers) {
         return res.status(401).json({ erro: erroJwtMsg });
       }

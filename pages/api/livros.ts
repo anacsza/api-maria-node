@@ -1,4 +1,5 @@
 import { connectMongoDB } from "@/middlewares/connectMongoDB";
+import { validateJWT } from "@/middlewares/validateJWT";
 import { LivrosModel } from "@/models/livrosModel";
 import { LivrosRequest } from "@/types/livrosRequest";
 import { NextApiRequest, NextApiResponse } from "next";
@@ -74,4 +75,4 @@ const endpointLivros = nc()
     return res.status(204).json({});
   });
 
-export default connectMongoDB(endpointLivros);
+export default validateJWT(connectMongoDB(endpointLivros));
