@@ -35,7 +35,7 @@ const endpointUsuarios = nc()
       if (
         !usuario.senha ||
         usuario.senha === "" ||
-        padraoSenhaRegex.test(usuario.senha)
+        !padraoSenhaRegex.test(usuario.senha)
       ) {
         return res
           .status(400)

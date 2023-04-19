@@ -19,7 +19,7 @@ const endpointAcessosUsuarios = nc().post(
         email: email,
         senha: md5(senha),
       });
-
+      console.log(usuarioEncontrado)
       if (!usuarioEncontrado || usuarioEncontrado.length === 0) {
         return res.status(404).json({ msg: "Usuário não encontrado." });
       }
