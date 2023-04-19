@@ -6,9 +6,6 @@ import { PedidosRequest } from "@/types/pedidosRequest";
 import { UsuariosModel } from "@/models/usuariosModel";
 import { LivrosModel } from "@/models/livrosModel";
 import { PedidosModel } from "@/models/pedidosModel";
-import { consultarLivros } from "@/services/livrosService";
-import { consultarUsuarios } from "@/services/usuariosService";
-import { consultarPedidos } from "@/services/pedidosService";
 
 const endpointPedidos = nc()
   .post(async (req: NextApiRequest, res: NextApiResponse) => {
