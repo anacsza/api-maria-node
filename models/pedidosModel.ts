@@ -1,8 +1,8 @@
 import mongoose, { Schema } from "mongoose";
 
 const PedidosSchema = new Schema({
-    idUsuario: { type: String, required: true},
-    idLivro: { type: String, required: true},
+    usuarios: { type: mongoose.Schema.Types.ObjectId, ref: 'usuarios', required: true},
+    livros: { type: mongoose.Schema.Types.ObjectId, ref: 'livros', required: true},
     valor: { type: String, required: true},
     dataPedido: { type: Date, required: true},
     status: { type: String, required: true}

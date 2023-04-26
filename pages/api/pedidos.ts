@@ -41,8 +41,8 @@ const endpointPedidos = nc()
     }
 
     const novoPedido = {
-      idUsuario: pedido.idUsuario,
-      idLivro: pedido.idLivro,
+      usuarios: pedido.idUsuario,
+      livros: pedido.idLivro,
       valor: pedido.valor,
       dataPedido: new Date().toISOString(),
       status: "NOVO",
@@ -65,56 +65,38 @@ const endpointPedidos = nc()
       if (!idPedido) {
         const { titulo, status, nome } = req.query;
 
-        let livros = [];
-        if (titulo) {
-          livros = await LivrosModel.find({
-            $or: [{ titulo: { $regex: titulo, $options: "i" } }],
+        let pedidos = await PedidosModel.find({
+          $or: [{ status: { $regex: status, $options: "i" } }],
+        })
+          .populate({
+            path: "usuarios",
+            select: "nome email",
+          })
+          .populate({
+            path: "livros",
           });
-        }
-        let usuarios = [];
-        if (nome) {
-          usuarios = await UsuariosModel.find({
-            $or: [{ nome: { $regex: nome, $options: "i" } }],
-          });
-        }
-        let pedidos = [];
-        if (status) {
-          pedidos = await PedidosModel.find({
-            $or: [{ status: { $regex: status, $options: "i" } }],
-          });
-        }
+
         return res.status(200).json({
           data: {
-            livros: livros,
-            usuarios: usuarios,
             pedidos: pedidos,
           },
         });
       }
 
-      const pedidoEncontrado = await PedidosModel.findById(idPedido);
+      const pedidoEncontrado = await PedidosModel.findById(idPedido)
+        .populate({
+          path: "usuarios",
+          select: "nome email",
+        })
+        .populate({
+          path: "livros",
+        });
 
       if (!pedidoEncontrado || pedidoEncontrado.length === 0) {
         return res.status(404).json({ msg: "Pedido não encontrado" });
       }
 
-      const livroEncontrado = await LivrosModel.findById(
-        pedidoEncontrado.idLivro
-      );
-
-      if (!livroEncontrado || livroEncontrado.length === 0) {
-        return res.status(404).json({ msg: "Livro não encontrado" });
-      }
-
-      usuarioEncontrado.senha = null;
-
-      const pedidoResponse = {
-        pedido: pedidoEncontrado,
-        usuario: usuarioEncontrado,
-        livro: livroEncontrado,
-      };
-
-      return res.status(200).json({ data: pedidoResponse });
+      return res.status(200).json({ data: pedidoEncontrado });
     } catch (error) {
       return res
         .status(500)
